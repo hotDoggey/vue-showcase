@@ -73,14 +73,16 @@ button {
     border-radius: 4px;
 }
 
+#app {
+    min-height: 100vh;
+}
+
 #page-footer {
-    position: fixed;
-    bottom: -50px; /* set the initial position to hide the bar */
-    left: 0;
-    width: 100%;
+    position: sticky;
+    top: 100%;
+    height: 5vh;
     background-color: #333;
     color: #fff;
-    transition: bottom 0.3s ease-in-out; /* add transition effect */
 }
 #page-footer.show {
     bottom: 0; /* move the bar up to show it */
