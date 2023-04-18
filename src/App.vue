@@ -1,28 +1,46 @@
 <template>
     <!-- prettier-ignore   -->
-    <PageHeader title="Name Of Site"/>
-    <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link :to="{ name: 'about' }">About</router-link> |
-        <router-link :to="{ name: 'jobs' }">Jobs</router-link>
-    </nav>
+    <PageHeader title="CarCheck" :router="$router"/>
     <button @click="redirect">Redirect</button>
     <button @click="back">Go Back</button>
     <button @click="forward">Go Forward</button>
 
-    <!-- router-view is where  the content of each component page is displayed, as nav is separate it will always be shown at the top of all pages -->
     <router-view />
+    <!-- router-view is where the content of each component page is displayed, as nav is separate it will always be shown at the top of all pages -->
+    <PageFooter
+        id="page-footer"
+        footer_content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure cumcum animi suscipit. Quae aut reprehenderit dicta
+            repellendssimus corporis quas sit amet optio fugiat numquam omnis iure."
+    ></PageFooter>
 </template>
 
 <script>
-import PageHeader from "./components/page_header.vue";
-
 export default {
     name: "App",
-    components: {
-        PageHeader,
+    components: {},
+    data() {
+        return {
+            showBar: false,
+            buffer: 50,
+        };
+    },
+    mounted() {
+        window.addEventListener("scroll", this.handleScroll);
+    },
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.handleScroll);
     },
     methods: {
+        handleScroll() {
+            const distanceFromTop = window.pageYOffset + window.innerHeight;
+            const documentHeight = document.body.scrollHeight;
+
+            if (distanceFromTop >= documentHeight - this.buffer) {
+                this.showBar = true;
+            } else {
+                this.showBar = false;
+            }
+        },
         redirect() {
             this.$router.push({ name: "home" });
         },
@@ -37,30 +55,34 @@ export default {
 </script>
 
 <style>
+:root {
+    --primary-color: #2c3e50;
+}
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    color: var(--primary-color);
 }
 
-nav {
-    padding: 30px;
-}
-
-nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-    color: #42b983;
-}
 button {
     margin: 0 10px;
     padding: 10px;
     border: none;
     border-radius: 4px;
+}
+
+#page-footer {
+    position: fixed;
+    bottom: -50px; /* set the initial position to hide the bar */
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    transition: bottom 0.3s ease-in-out; /* add transition effect */
+}
+#page-footer.show {
+    bottom: 0; /* move the bar up to show it */
 }
 </style>
